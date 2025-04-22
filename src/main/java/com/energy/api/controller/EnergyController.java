@@ -1,51 +1,36 @@
 package com.energy.api.controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 
+@RestController
+@RequestMapping("/energy")
 public class EnergyController {
 
-    @FXML
-    private Label labelCommunityPool;
+    private final UsageDataRepository usageRepo;
 
-    @FXML
-    private Label labelGridPortion;
+    private final EnergyPercentageRepository percentageRepo;
 
-    @FXML
-    private Button btnRefresh;
+    public EnergyController(UsageDataRepository usageRepo, EnergyPercentageRepository percentageRepo) {
+        this.usageRepo = usageRepo;
+        this.percentageRepo = percentageRepo;
 
-    @FXML
-    private Label labelChooseStart;
+        percentageRepo.save(LocalDateTime.of(2025, 1, 10, 14, 0), new EnergyPercentage(100.0, 5.63));
+    }
 
-    @FXML
-    private Label labelChooseEnd;
+    @GetMapping("/current")
+    public EnergyPercentage getCurrent() {
+        return percentageRepo.getCurrent();
+    }
 
-    @FXML
-    private DatePicker dpStart;
-
-    @FXML
-    private DatePicker dpEnd;
-
-    @FXML
-    private TextField tfStart;
-
-    @FXML
-    private TextField tfEnd;
-
-    @FXML
-    private Button btnShowData;
-
-    @FXML
-    private Label CommunityProduced;
-
-    @FXML
-    private Label labelCommunityUsed;
-
-    @FXML
-    private Label labelGridUsed;
-
+    @GetMapping("/historical")
+    public List<UsageData> getHistorical() {
+        return usageRepo.findAll();
+    }
 }

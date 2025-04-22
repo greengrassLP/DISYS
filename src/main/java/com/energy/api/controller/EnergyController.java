@@ -1,9 +1,12 @@
 package com.energy.api.controller;
 
+import com.energy.api.model.EnergyPercentage;
+import com.energy.api.model.UsageData;
+import com.energy.api.repository.EnergyPercentageRepository;
+import com.energy.api.repository.UsageDataRepository;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -26,4 +26,6 @@ public class EnergyPercentage {
     public void setGridPortion(double gridPortion) {
         this.gridPortion = gridPortion;
     }
+
+
 }

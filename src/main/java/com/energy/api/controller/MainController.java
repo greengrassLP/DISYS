@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import com.energy.api.model.EnergyPercentage;
 import com.energy.api.model.UsageData;
-import com.energy.api.model.service.ApiService;
+import com.energy.api.service.ApiService;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -65,21 +65,11 @@ public class MainController {
             LocalDateTime start = dpStart.getValue().atStartOfDay();
             LocalDateTime end = dpEnd.getValue().atTime(23, 59, 59);
 
-//            String start = dpStart.getValue() + "T" + tfStart.getText();
-//            String end = dpEnd.getValue() + "T" + tfEnd.getText();
-//
-//            LocalDateTime startTime = LocalDateTime.parse(start, formatter);
-//            LocalDateTime endTime = LocalDateTime.parse(end, formatter);
-
             List<UsageData> data = apiService.fetchHistorical(start, end);
             if (!data.isEmpty()) {
-//                UsageData latest = data.getLast();
                 labelCommunityProduced.setText("Community produced: " + produced + " kWh");
                 labelCommunityUsed.setText("Community used: " + used + " kWh");
                 labelGridUsed.setText("Grid used: " + grid + " kWh");
-//                labelCommunityProduced.setText("Community produced: " + latest.getCommunityProduced() + " kWh");
-//                labelCommunityUsed.setText("Community used: " + latest.getCommunityUsed() + " kWh");
-//                labelGridUsed.setText("Grid used: " + latest.getGridUsed() + " kWh");
             } else {
                 labelCommunityProduced.setText("No data");
                 labelCommunityUsed.setText("");
@@ -92,7 +82,4 @@ public class MainController {
             e.printStackTrace();
         }
     }
-}
-
-
 }

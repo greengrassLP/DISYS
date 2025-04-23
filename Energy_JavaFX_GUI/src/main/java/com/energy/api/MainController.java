@@ -92,4 +92,6 @@ public class MainController {
             labelGridUsed.setText("");
         }
     }
+
+    // just checking if it works
 }

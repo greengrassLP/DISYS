@@ -12,57 +12,56 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox minWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.energy.api.controller.MainController">
+<VBox minWidth="350.0" spacing="5.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.energy.api.MainController">
    <padding>
-      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
    </padding>
    <VBox spacing="5.0">
       <VBox.margin>
-         <Insets bottom="20.0"/>
+         <Insets bottom="20.0" />
       </VBox.margin>
-      <Label fx:id="labelCommunityPool" text="Community Pool"/>
-      <Separator/>
-      <Label fx:id="labelGridPortion" text="Grid Portion"/>
+      <Label fx:id="labelCommunityPool" text="Community Pool" />
+      <Separator />
+      <Label fx:id="labelGridPortion" text="Grid Portion" />
    </VBox>
-   <Button fx:id="btnRefresh" mnemonicParsing="false" text="refresh" onAction="#onRefresh"/>
+   <Button fx:id="btnRefresh" mnemonicParsing="false" onAction="#onRefresh" text="refresh" />
    <Separator prefWidth="200.0">
       <VBox.margin>
-         <Insets top="10.0"/>
+         <Insets top="10.0" />
       </VBox.margin>
    </Separator>
    <GridPane>
       <columnConstraints>
-         <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.0" minWidth="10.0" prefWidth="103.0"/>
-         <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="97.0"/>
+         <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.0" minWidth="10.0" prefWidth="103.0" />
+         <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="97.0" />
       </columnConstraints>
       <rowConstraints>
-         <RowConstraints maxHeight="400.0" minHeight="16.0" prefHeight="26.0" vgrow="SOMETIMES"/>
-         <RowConstraints maxHeight="255.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES"/>
+         <RowConstraints maxHeight="400.0" minHeight="16.0" prefHeight="26.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="255.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
       </rowConstraints>
       <padding>
-         <Insets bottom="10.0" top="10.0"/>
+         <Insets bottom="10.0" top="10.0" />
       </padding>
-      <Label fx:id="chooseStart" text="Start"/>
-      <Label fx:id="chooseEnd" text="End" GridPane.rowIndex="1"/>
+      <Label fx:id="chooseStart" text="Start" />
+      <Label fx:id="chooseEnd" text="End" GridPane.rowIndex="1" />
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
-         <DatePicker fx:id="dpStart"/>
-         <!-- <TextField fx:id="tfStart"/> -->
+         <DatePicker fx:id="dpStart" minWidth="120.0" />
+         <TextField fx:id="tfStart" minWidth="80.0" promptText="HH:mm:ss" />
       </HBox>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <DatePicker fx:id="dpEnd"/>
-         <!-- <TextField fx:id="tfEnd"/> -->
+         <DatePicker fx:id="dpEnd" minWidth="120.0" />
+         <TextField fx:id="tfEnd" minWidth="80.0" promptText="HH:mm:ss" />
       </HBox>
    </GridPane>
-   <Button fx:id="btnShowData" mnemonicParsing="false" text="show data" onAction="#onShowData"/>
+   <Button fx:id="btnShowData" mnemonicParsing="false" onAction="#onShowData" text="show data" />
    <Separator prefWidth="200.0">
       <padding>
-         <Insets top="10.0"/>
+         <Insets top="10.0" />
       </padding>
    </Separator>
-   <Label fx:id="labelCommunityProduced" text="Community produced"/>
-   <Separator prefWidth="200.0"/>
-   <Label fx:id="labelCommunityUsed" text="Community used"/>
-   <Separator prefWidth="200.0"/>
-   <Label fx:id="labelGridUsed" text="Grid used"/>
+   <Label fx:id="labelCommunityProduced" text="Community produced" />
+   <Separator prefWidth="200.0" />
+   <Label fx:id="labelCommunityUsed" text="Community used" />
+   <Separator prefWidth="200.0" />
+   <Label fx:id="labelGridUsed" text="Grid used" />
 </VBox>

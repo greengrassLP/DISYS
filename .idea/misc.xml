@@ -6,6 +6,11 @@
       <list>
         <option value="$PROJECT_DIR$/Energy_Springboot/pom.xml" />
         <option value="$PROJECT_DIR$/Energy_JavaFX/pom.xml" />
+        <option value="$PROJECT_DIR$/EnergyProducer/pom.xml" />
+        <option value="$PROJECT_DIR$/EnergyUser/pom.xml" />
+        <option value="$PROJECT_DIR$/UsageService/pom.xml" />
+        <option value="$PROJECT_DIR$/CurrentPercentageService/pom.xml" />
+        <option value="$PROJECT_DIR$/Energy_JavaFX_GUI/pom.xml" />
       </list>
     </option>
   </component>

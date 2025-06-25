@@ -28,7 +28,7 @@ public class UserService {
      * Sendet alle 1–5 Sekunden eine USER-Nachricht,
      * mit Verbrauch abhängig von der Tageszeit.
      */
-    @Scheduled(fixedDelayString = "#{T(java.util.concurrent.ThreadLocalRandom).current().nextInt(1000,5000)}")
+    @Scheduled(fixedRate = 5000)
     public void sendUsage() {
         // Tageszeit-Faktor (z.B. mehr Verbrauch morgens/abends)
         int hour = ZonedDateTime.now().getHour();
@@ -43,9 +43,8 @@ public class UserService {
         msg.put("datetime",    ZonedDateTime.now().toString());
 
         try {
-            String json = objectMapper.writeValueAsString(msg);
-            rabbitTemplate.convertAndSend(queueName, json);
-            System.out.printf("[User] Sent to '%s': %s%n", queueName, json);
+            rabbitTemplate.convertAndSend(queueName, msg);
+            System.out.printf("[User] Sent to '%s': %s%n", queueName, msg);
         } catch (Exception e) {
             e.printStackTrace();
         }

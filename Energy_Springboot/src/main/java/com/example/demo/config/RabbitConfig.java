@@ -1,18 +1,16 @@
-package org.example.usageservice.config;
+package com.example.demo.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 public class RabbitConfig {
 
     /** Queue, in die Producer und User ihre Roh-Events posten */
@@ -34,33 +32,21 @@ public class RabbitConfig {
         return new Queue(updateQueueName, true);
     }
 
+    // 1. JSON‐Converter bean
     @Bean
-    public ObjectMapper jacksonObjectMapper() {
-        ObjectMapper om = new ObjectMapper();
-        om.registerModule(new JavaTimeModule());
-        om.findAndRegisterModules();
-        om.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        return om;
-    }
-
-    @Bean
-    public MessageConverter jsonMessageConverter() {
+    public Jackson2JsonMessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
+    // 2. RabbitTemplate mit JSON‐Converter
     @Bean
-    public Jackson2JsonMessageConverter jackson2JsonMessageConverter(ObjectMapper mapper) {
-        return new Jackson2JsonMessageConverter(mapper);
-    }
-
-    @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory cf,
-                                         Jackson2JsonMessageConverter conv) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory cf, Jackson2JsonMessageConverter conv) {
         RabbitTemplate template = new RabbitTemplate(cf);
         template.setMessageConverter(conv);
         return template;
     }
 
+    // 3. Listener‐Container Factory mit JSON‐Converter
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
             ConnectionFactory cf,

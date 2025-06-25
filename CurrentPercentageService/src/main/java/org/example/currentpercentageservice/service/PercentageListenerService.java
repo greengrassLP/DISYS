@@ -42,8 +42,9 @@ public class PercentageListenerService {
             double communityDepleted = produced > 0
                     ? Math.min(used / produced, 1.0) * 100.0
                     : 0.0;
-            double gridPortion = (produced + grid) > 0
-                    ? (grid / (produced + grid)) * 100.0
+            double totalUsed = used + grid;
+            double gridPortion = totalUsed > 0
+                    ? (grid / totalUsed) * 100.0
                     : 0.0;
 
             CurrentPercentage cp = new CurrentPercentage();

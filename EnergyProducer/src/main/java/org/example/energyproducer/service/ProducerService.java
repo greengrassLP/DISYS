@@ -33,7 +33,7 @@ public class ProducerService {
      * Alle 1–5 Sekunden eine PRODUCER-Nachricht senden,
      * nach dem EchoInProducer-Vorbild aus dem Lecture-Code.
      */
-    @Scheduled(fixedDelayString = "#{T(java.util.concurrent.ThreadLocalRandom).current().nextInt(1000,5000)}")
+    @Scheduled(fixedRate = 5000)
     public void sendProduction() {
         try {
             // 1) Wetter abfragen
@@ -58,9 +58,8 @@ public class ProducerService {
             msg.put("datetime",    ZonedDateTime.now().toString());
 
             // 4) Senden (JSON-String)
-            String json = objectMapper.writeValueAsString(msg);
-            rabbitTemplate.convertAndSend(queueName, json);
-            System.out.printf("[Producer] Sent to '%s': %s%n", queueName, json);
+            rabbitTemplate.convertAndSend(queueName, msg);
+            System.out.printf("[Producer] Sent to '%s': %s%n", queueName, msg);
 
         } catch (Exception e) {
             System.err.println("Error in ProducerService: " + e.getMessage());

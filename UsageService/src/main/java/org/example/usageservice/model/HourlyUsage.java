@@ -5,13 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "hourly_usage")
+@Table(name = "usage")
 public class HourlyUsage {
     @Id
     @Column(name = "hour", nullable = false)
-    private Instant hour;
+    private ZonedDateTime hour;
 
     @Column(name = "community_produced", nullable = false)
     private double communityProduced = 0.0;
@@ -22,9 +23,17 @@ public class HourlyUsage {
     @Column(name = "grid_used", nullable = false)
     private double gridUsed = 0.0;
 
+    public HourlyUsage() {
+    }
+
+    public HourlyUsage(ZonedDateTime hour) {
+        this.hour = hour;
+    }
+
+
     // Getter & Setter
-    public Instant getHour() { return hour; }
-    public void setHour(Instant hour) { this.hour = hour; }
+    public ZonedDateTime getHour() { return hour; }
+    public void setHour(ZonedDateTime hour) { this.hour = hour; }
     public double getCommunityProduced() { return communityProduced; }
     public void setCommunityProduced(double v) { this.communityProduced = v; }
     public double getCommunityUsed() { return communityUsed; }

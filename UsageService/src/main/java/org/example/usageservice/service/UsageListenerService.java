@@ -1,7 +1,7 @@
 package org.example.usageservice.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.usageservice.dto.RawEnergyMessageDto;
+import org.example.usageservice.dto.UsageUpdateDto;
 import org.example.usageservice.model.HourlyUsage;
 import org.example.usageservice.repository.HourlyUsageRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,10 +16,8 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 public class UsageListenerService {
-
     private final HourlyUsageRepository repo;
     private final RabbitTemplate rabbit;
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Value("${update.queue.name}")
     private String updateQueue;
@@ -31,41 +29,23 @@ public class UsageListenerService {
 
     @Transactional
     @RabbitListener(queues = "${raw.queue.name}")
-    public void handleRaw(String json) {
-        try {
-            JsonNode n = mapper.readTree(json);
+    public void handleRaw(RawEnergyMessageDto msg) {
+        // Stunde runden
+        ZonedDateTime hour = msg.getTimestamp().truncatedTo(ChronoUnit.HOURS);
+        HourlyUsage u = repo.findById(hour)
+                .orElseGet(() -> new HourlyUsage(hour));
 
-            // ZonedDateTime parsen (inkl. Zone-ID) und zu Instant konvertieren
-            ZonedDateTime zdt = ZonedDateTime.parse(n.get("datetime").asText());
-            Instant ts = zdt.toInstant();
-            Instant hour = ts.truncatedTo(ChronoUnit.HOURS);
-
-            HourlyUsage u = repo.findById(hour).orElseGet(() -> {
-                HourlyUsage h = new HourlyUsage();
-                h.setHour(hour);
-                return h;
-            });
-
-            double kwh = n.get("kwh").asDouble();
-            if ("PRODUCER".equals(n.get("type").asText())) {
-                u.setCommunityProduced(u.getCommunityProduced() + kwh);
-            } else {
-                u.setCommunityUsed(u.getCommunityUsed() + kwh);
-                double surplus = u.getCommunityProduced() - u.getCommunityUsed();
-                if (surplus < 0) {
-                    u.setGridUsed(u.getGridUsed() + (-surplus));
-                }
+        if (msg.getType() == RawEnergyMessageDto.Type.PRODUCER) {
+            u.setCommunityProduced(u.getCommunityProduced() + msg.getKwh());
+        } else {
+            u.setCommunityUsed(u.getCommunityUsed() + msg.getKwh());
+            double surplus = u.getCommunityProduced() - u.getCommunityUsed();
+            if (surplus < 0) {
+                u.setGridUsed(u.getGridUsed() + -surplus);
             }
-
-            // Speichern der aktualisierten Stunde
-            repo.save(u);
-
-            // Als Update-Event zurückschicken
-            String out = mapper.writeValueAsString(u);
-            rabbit.convertAndSend(updateQueue, out);
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        repo.save(u);
+        rabbit.convertAndSend(updateQueue, new UsageUpdateDto(hour));
     }
 }

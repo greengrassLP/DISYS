@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
 
 @Service
 public class PercentageListenerService {
@@ -22,6 +23,8 @@ public class PercentageListenerService {
 
     public PercentageListenerService(CurrentPercentageRepository repository) {
         this.repository = repository;
+        // Clear existing data on startup
+        repository.deleteAll();
     }
 
     /**
@@ -29,15 +32,22 @@ public class PercentageListenerService {
      * und speichert CurrentPercentage in der DB.
      */
     @Transactional
-    @RabbitListener(queues = "${update.queue.name}")
+    @RabbitListener(queues = {"${producer.queue.name}", "${user.queue.name}"})
     public void onUpdate(String messageJson) {
         try {
             JsonNode node = mapper.readTree(messageJson);
 
-            Instant hour    = Instant.parse(node.get("hour").asText());
-            double produced = node.get("communityProduced").asDouble();
-            double used     = node.get("communityUsed").asDouble();
-            double grid     = node.get("gridUsed").asDouble();
+            // Get the datetime and convert to Instant
+            String datetimeStr = node.get("datetime").asText();
+            ZonedDateTime zdt = ZonedDateTime.parse(datetimeStr);
+            Instant instant = zdt.toInstant();
+            
+            // For USER messages, kwh represents used energy
+            // For PRODUCER messages, kwh represents produced energy
+            double kwh = node.get("kwh").asDouble();
+            double used = node.get("type").asText().equals("USER") ? kwh : 0.0;
+            double produced = node.get("type").asText().equals("PRODUCER") ? kwh : 0.0;
+            double grid = 0.0; // We don't have grid data in these messages
 
             double communityDepleted = produced > 0
                     ? Math.min(used / produced, 1.0) * 100.0
@@ -47,14 +57,14 @@ public class PercentageListenerService {
                     : 0.0;
 
             CurrentPercentage cp = new CurrentPercentage();
-            cp.setHour(hour);
+            cp.setHour(instant);
             cp.setCommunityDepleted(communityDepleted);
             cp.setGridPortion(gridPortion);
 
             repository.save(cp);
 
-            log.info("Saved CurrentPercentage [hour={}, communityDepleted={}%, gridPortion={}%]",
-                    hour, communityDepleted, gridPortion);
+            log.info("Saved CurrentPercentage [datetime={}, communityDepleted={}%, gridPortion={}%]",
+                    instant, communityDepleted, gridPortion);
 
         } catch (Exception e) {
             log.error("Failed to process update message: {}", messageJson, e);

@@ -8,11 +8,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    @Value("${update.queue.name}")
-    private String updateQueueName;
+    @Value("${producer.queue.name}")
+    private String producerQueueName;
+
+    @Value("${user.queue.name}")
+    private String userQueueName;
 
     @Bean
-    public Queue updateQueue() {
-        return new Queue(updateQueueName, true);
+    public Queue producerQueue() {
+        return new Queue(producerQueueName, true);
+    }
+
+    @Bean
+    public Queue userQueue() {
+        return new Queue(userQueueName, true);
     }
 }

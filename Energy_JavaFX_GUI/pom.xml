@@ -65,6 +65,15 @@
 						<mainClass>com.energy.api.EnergyApiApplication</mainClass>
 					</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.8</version>
+				<configuration>
+					<mainClass>com.energy.api.EnergyApp</mainClass>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

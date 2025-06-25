@@ -6,13 +6,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="CurrentPercentageService" />
+        <module name="UsageService" />
         <module name="demo" />
         <module name="energy-api" />
+        <module name="EnergyProducer" />
+        <module name="EnergyUser" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="CurrentPercentageService" options="-parameters" />
+      <module name="EnergyProducer" options="-parameters" />
+      <module name="EnergyUser" options="-parameters" />
+      <module name="UsageService" options="-parameters" />
       <module name="demo" options="-parameters" />
       <module name="energy-api" options="-parameters" />
     </option>

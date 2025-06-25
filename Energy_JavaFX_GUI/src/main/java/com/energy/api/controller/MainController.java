@@ -1,7 +1,7 @@
-package com.energy.api;
+package com.energy.api.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.energy.api.dto.EnergyData;
+import com.energy.api.service.ApiService;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 
@@ -10,11 +10,6 @@ import javafx.scene.control.TextField;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 
 public class MainController {

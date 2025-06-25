@@ -1,6 +1,6 @@
-package com.energy.api;
+package com.energy.api.service;
 
-import com.energy.api.EnergyData;
+import com.energy.api.dto.EnergyData;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ApiService {
-    private final String BASE_URL = "http://localhost:8080/energy";
+    private final String BASE_URL = "http://localhost:8081/energy";
     private final HttpClient client = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 

@@ -35,12 +35,6 @@
 			<artifactId>spring-boot-starter-json</artifactId>
 		</dependency>
 
-		<!-- RabbitMQ AMQP Starter -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
-
 		<!-- JPA / Hibernate Starter -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -60,6 +54,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
